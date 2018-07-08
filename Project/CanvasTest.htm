@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -7,126 +7,149 @@
 <body>
 	<canvas id="ToothChart" style="box-shadow: 2px 2px 2px #aaa"></canvas>
 </body>
+</html>
 <script type="text/javascript">
 
-	window.onload = function () {
-		CanvasInit();
-	}
-	
-	function CanvasInit() {
-		var canvas = document.getElementById('ToothChart'),
-			X = 1600,
-			Y = 900,
-			sTopLeft = {
-				'x': '-83',
-				'y': '-16'
-			},
-			sTopRight = {
-				'x': '83',
-				'y': '-16'
-			},
-			sBotLeft = {
-				'x': '-83',
-				'y': '16'
-			},
-			sBotRight = {
-				'x': '83',
-				'y': '16'
-			},
-			nextMove = '350';
+    window.onload = function () {
+        CanvasInit();
+    }
 
-		//Caps = original | Small = new
-		//(H / W) * w = h
-		canvas.width = X;
-		canvas.height = Y;
-		
-		if (canvas.getContext) {
-			var context = canvas.getContext('2d');
-			
-			context.scale(0.5, 0.5);
-			context.translate(X, Y);
+    function CanvasInit() {
+        var canvas = document.getElementById('ToothChart'),
+            X = 1600,
+            Y = 900,
+            sTopLeft = {
+                'x': '-83',
+                'y': '-16'
+            },
+            sTopRight = {
+                'x': '83',
+                'y': '-16'
+            },
+            sBotLeft = {
+                'x': '-83',
+                'y': '16'
+            },
+            sBotRight = {
+                'x': '83',
+                'y': '16'
+            },
+            nextMove = '350';
 
-			//context.rotate((Math.PI / 180) * -90);
-			
-			ShowGridLines(context, X, Y);
-			
-			DrawTooth(context, sTopRight);
-			DrawTooth(context, sBotRight, ['y']);
-			DrawTooth(context, sTopLeft, ['x']);
-			DrawTooth(context, sBotLeft, ['x', 'y']);
-			
-			// sx = '350';
-			// DrawTooth(context, sx, sy);
-			// sx = '83';
-			// sy = '16';
-			// DrawTooth(context, sx, sy, 'y');
-			
-			// sx = '-83';
-			// sy = '-16';
-			// DrawTooth(context, sx, sy, 'x');
-			
-			//DrawPosRect(context, sx, sy);
-		}
-	}
-	
-	function DrawTooth(ctx, sXY, flipAxis) {
-		var curveString = '4,-1 6,-1 20,-7 12,-5 22,-7 35,-7 13,0 23,2 35,7 13,5 15,6 20,7 7,1 20,2 27,0 21,-4 37,-19 42,-40 1,-6 2,-16 1,-32 -4,-87 -29,-181 -50,-196 -4,-2 -7,-2 -12,3 -5,6 -10,16 -19,45 -11,32 -16,43 -25,52 -6,6 -14,8 -22,7 -12,-2 -22,-12 -31,-34 -1,-3 -5,-15 -9,-26 -9,-28 -14,-38 -19,-44 -4,-4 -7,-5 -12,-2 -5,3 -12,15 -18,30 -15,37 -28,106 -31,165 -0,15 -0,26 1,33 5,21 22,36 44,40 4,0 20,0 25,-1',
-			arrCurve = curveString.split(' '),
-			arrCords = new Array(arrCurve.length / 3),
-			flipedCurve = 'm ' + sXY.x + ',' + sXY.y + ' c';
-		
-		for (let i = 0; i < arrCords.length; i++) {
-			arrCords[i] = new Array(3);
-			for (let ii = 0; ii < arrCords[i].length; ii++) {
-				let xy = arrCurve.shift().split(',');
-				
-				arrCords[i][ii] = {'x': xy[0], 'y': xy[1]};
-			}
-		}
-		
-		for (let i = 0; i < arrCords.length; i++) {
-			for (let ii = 0; ii < arrCords[i].length; ii++) {
-				var xy = arrCords[i][ii];
-				
-				if (flipAxis !== undefined) {
-					for (let iii in flipAxis) {
-						if (xy[flipAxis[iii]].indexOf('-') === 0) {
-							xy[flipAxis[iii]] = xy[flipAxis[iii]].slice(1, xy[flipAxis[iii]].length);
-						}
-						else {
-							xy[flipAxis[iii]] = '-' + xy[flipAxis[iii]];
-						}
-					}
-				}
-				
-				flipedCurve += ' ' + xy.x + ',' + xy.y;
-			}
-		}
-		
-		flipedCurve += ' z';
-		
-		let tooth = new Path2D(flipedCurve);
-		
-		ctx.lineWidth = '3';
-		ctx.strokeStyle = '#000';
-		ctx.stroke(tooth);
-	}
+        //Caps = original | Small = new
+        //(H / W) * w = h
+        canvas.width = X;
+        canvas.height = Y;
 
-	function DrawPosRect(ctx) {
-		//position rect
-		ctx.beginPath();
-		ctx.lineWidth = '3';
-		ctx.strokeStyle = '#f00';
-		ctx.rect(-10, -10, -260, -280);
-		ctx.rect(10, -10, 260, -280);
-		ctx.stroke();
-	}
-	
-	function ShowGridLines(ctx, x, y) {
-		ctx.fillStyle = '#eee';
-		ctx.fillRect(-x, -1, x * 2, 3); //horizontal line
-		ctx.fillRect(-1, -y, 3, y * 2); //vertical line
-	}
+        if (canvas.getContext) {
+            var context = canvas.getContext('2d');
+
+            context.scale(0.5, 0.5);
+            context.translate(X, Y);
+
+            //context.rotate((Math.PI / 180) * -90);
+
+            ShowGridLines(context, X, Y);
+
+            //DrawTooth(context, sTopRight);
+            DrawTooth(context, sBotRight, ['y']);
+            //DrawTooth(context, sTopLeft, ['x']);
+            //DrawTooth(context, sBotLeft, ['x', 'y']);
+
+            // sx = '350';
+            // DrawTooth(context, sx, sy);
+            // sx = '83';
+            // sy = '16';
+            // DrawTooth(context, sx, sy, 'y');
+
+            // sx = '-83';
+            // sy = '-16';
+            // DrawTooth(context, sx, sy, 'x');
+
+            //DrawPosRect(context, sx, sy);
+        }
+    }
+
+    function DrawTooth(ctx, sXY, flipAxis) {
+        var curveString = '4,-1 6,-1 20,-7 12,-5 22,-7 35,-7 13,0 23,2 35,7 13,5 15,6 20,7 7,1 20,2 27,0 21,-4 37,-19 42,-40 1,-6 2,-16 1,-32 -4,-87 -29,-181 -50,-196 -4,-2 -7,-2 -12,3 -5,6 -10,16 -19,45 -11,32 -16,43 -25,52 -6,6 -14,8 -22,7 -12,-2 -22,-12 -31,-34 -1,-3 -5,-15 -9,-26 -9,-28 -14,-38 -19,-44 -4,-4 -7,-5 -12,-2 -5,3 -12,15 -18,30 -15,37 -28,106 -31,165 -0,15 -0,26 1,33 5,21 22,36 44,40 4,0 20,0 25,-1',
+            arrCurve = curveString.split(' '),
+            arrCords = new Array(arrCurve.length / 3),
+            flipedCurve = 'm ' + sXY.x + ',' + sXY.y + ' c';
+
+        for (let i = 0; i < arrCords.length; i++) {
+            arrCords[i] = new Array(3);
+            for (let ii = 0; ii < arrCords[i].length; ii++) {
+                let xy = arrCurve.shift().split(',');
+
+                arrCords[i][ii] = { 'x': xy[0], 'y': xy[1] };
+            }
+        }
+        
+        for (let i = 0; i < arrCords.length; i++) {
+            for (let ii = 0; ii < arrCords[i].length; ii++) {
+                var xy = arrCords[i][ii];
+
+                if (flipAxis !== undefined) {
+                    for (let iii in flipAxis) {
+                        if (xy[flipAxis[iii]].indexOf('-') === 0) {
+                            xy[flipAxis[iii]] = xy[flipAxis[iii]].slice(1, xy[flipAxis[iii]].length);
+                        }
+                        else {
+                            xy[flipAxis[iii]] = '-' + xy[flipAxis[iii]];
+                        }
+                    }
+                }
+
+                flipedCurve += ' ' + xy.x + ',' + xy.y;
+            }
+        }
+
+        flipedCurve += ' z';
+        
+        var test = GetPaths('Tooth_Paths');
+        
+        let tooth = new Path2D(flipedCurve);
+
+        ctx.lineWidth = '3';
+        ctx.strokeStyle = '#000';
+        ctx.stroke(tooth);
+    }
+
+    function GetPaths(fileName) {//fileName = 'Tooth_Paths'
+        var url = fileName + '.json',
+            request = new XMLHttpRequest(),
+            result;
+
+        request.open('GET', url);
+        request.responseType = 'json';
+        request.send();
+        debugger
+        request.onreadystatechange = function () {
+            debugger
+        }
+
+        request.onload = function () {
+            result = request.response;
+            debugger
+        }
+
+        return result;
+    }
+
+    function DrawPosRect(ctx) {
+        //position rect
+        ctx.beginPath();
+        ctx.lineWidth = '3';
+        ctx.strokeStyle = '#f00';
+        ctx.rect(-10, -10, -260, -280);
+        ctx.rect(10, -10, 260, -280);
+        ctx.stroke();
+    }
+
+    function ShowGridLines(ctx, x, y) {
+        ctx.fillStyle = '#eee';
+        ctx.fillRect(-x, -1, x * 2, 3); //horizontal line
+        ctx.fillRect(-1, -y, 3, y * 2); //vertical line
+    }
 
 </script>
-</html>
